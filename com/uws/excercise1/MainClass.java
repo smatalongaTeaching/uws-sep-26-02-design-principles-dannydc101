@@ -1,25 +1,35 @@
 package com.uws.excercise1;
 
 
-public class MainClass {
+public class MainClass {// refactored main class to account for the new classes
     
     public static void main(String[] args) {
-       
-        // Load employee from Employees.xml by ID
-        Employee emp2 = new Employee();
-        emp2 = emp2.loadFromDatabase(1);
+        EmployeeRepository repository = new EmployeeRepository();
+// initialise the employee repository
+        Employee emp = repository.findById(1);
 
-        // Print loaded employee details
-        System.out.println("Loaded Employee:");
-        System.out.println("ID: " + emp2.getId());
-        System.out.println("Name: " + emp2.getName());
+        //print selected employee details
+        if (emp != null) {
+            System.out.println("Loaded Employee:");
+            System.out.println("ID: "       + emp.getId());
+            System.out.println("Name: "     + emp.getName());
+            System.out.println("Position: " + emp.getPosition());
+            System.out.println("Salary: "   + emp.getSalary());
 
-        // You can also try loading a non-existent employee
-       emp2 =  emp2.loadFromDatabase(999);
-        if (emp2 == null) {
-            System.out.println("Employee with ID 999 does not exist.");
+
+            // use employee payrolll class for salary calculations
+            EmployeePayroll payroll = new EmployeePayroll(emp);
+            payroll.printPayrollSummary();
+        } else {
+            System.out.println("Employee with ID 1 does not exist.");
         }
 
-        
+
+        // attempt loading non vailid employee
+        Employee nonExistent = repository.findById(999);
+        if (nonExistent == null) {
+            System.out.println("Employee with ID 999 does not exist.");
+        }
     }
-}
+
+        }
